@@ -11,18 +11,22 @@ app.use(express.static('public'));
 
 
 app.get('/v1/notes', (req,res) => {
-  if (Object.keys(req.query).length === 0) {
-    // console.log('no req query: ' + req.query);
-    res.json(data);
-  } else {
-    // console.log('yes req query: ' + req.query);
-    let { searchTerm } = req.query;
-    let searchResults = data.filter((note) => {
-      return (note.title.includes(searchTerm) || note.content.includes(searchTerm));
-    });
-    // console.log(searchResults);
-    res.json(searchResults);
-  }
+  // if (Object.keys(req.query).length === 0) {
+  //   // console.log('no req query: ' + req.query);
+  //   res.json(data);
+  // } else {
+  //   // console.log('yes req query: ' + req.query);
+  //   let { searchTerm } = req.query;
+  //   let searchResults = data.filter((note) => {
+  //     return (note.title.includes(searchTerm) || note.content.includes(searchTerm));
+  //   });
+  //   // console.log(searchResults);
+  //   res.json(searchResults);
+  // }
+  const { searchTerm } = req.query;
+  searchResults = searchTerm ? data.find(note => return note.title.includes(searchTerm)) : data;
+  res.json(searchResults);
+  
 });
     
 
