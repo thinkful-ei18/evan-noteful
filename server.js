@@ -24,7 +24,7 @@ app.get('/v1/notes', (req,res) => {
   //   res.json(searchResults);
   // }
   const { searchTerm } = req.query;
-  searchResults = searchTerm ? data.find(note => return note.title.includes(searchTerm)) : data;
+  const  searchResults = searchTerm ? data.filter(note => note.title.includes(searchTerm) || note.content.includes(searchTerm)) : data;
   res.json(searchResults);
   
 });
