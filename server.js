@@ -2,34 +2,47 @@
 
 const data = require('./db/notes');
 const express = require('express');
-
 const app = express();
+const config = require('./config');
 
-// INSERT EXPRESS APP CODE HERE...
+// DEFINE MIDDLEWARE
 
+const logger = (req,res,next) => {
+  let today  = new Date();
+  console.log(today + ' ' + 'method: ' + req.method + ' url: ' + req.url);
+  next();
+};
+
+
+// USE MIDDLEWARE
 app.use(express.static('public'));
 
 
+app.use(logger);
+
+
+
+
+app.get('/home', (req,res) => {
+  res.send('you\'re home');
+});
+
+app.get('/boxes', (req,res) => {
+  res.send('boxes');
+});
+
+
+
+
+// METHOD ROUTES
 app.get('/v1/notes', (req,res) => {
-  // if (Object.keys(req.query).length === 0) {
-  //   // console.log('no req query: ' + req.query);
-  //   res.json(data);
-  // } else {
-  //   // console.log('yes req query: ' + req.query);
-  //   let { searchTerm } = req.query;
-  //   let searchResults = data.filter((note) => {
-  //     return (note.title.includes(searchTerm) || note.content.includes(searchTerm));
-  //   });
-  //   // console.log(searchResults);
-  //   res.json(searchResults);
-  // }
+  console.log(req.testing);
   const { searchTerm } = req.query;
   const  searchResults = searchTerm ? data.filter(note => note.title.includes(searchTerm) || note.content.includes(searchTerm)) : data;
   res.json(searchResults);
-  
 });
-    
 
+    
 app.get('/v1/notes/:id', (req,res) => {
   const { id } = req.params;
   let parsedId = parseInt(id);
@@ -40,7 +53,21 @@ app.get('/v1/notes/:id', (req,res) => {
 });
 
 
-app.listen(8080, () => {
+
+// Error Handler
+app.all('*',(req,res,next) => {
+  // res.send('this handles errors');
+  throw new Error('This could\'nt be located');
+});
+
+
+app.use(function (err, req, res, next) {
+  console.log('error handler ran');
+  res.send('There was a  problem: ' + err);
+  console.error(err);
+});
+
+app.listen(config.PORT, () => {
   console.log('server listening on port 8080');
 }).on('error', err => {
   console.log(err);
