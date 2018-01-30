@@ -53,18 +53,16 @@ app.get('/v1/notes/:id', (req,res) => {
 });
 
 
-
-// Error Handler
-app.all('*',(req,res,next) => {
-  // res.send('this handles errors');
-  throw new Error('This could\'nt be located');
+app.get('*',(req,res) => {
+  throw new Error('you screwed up!');
 });
 
 
 app.use(function (err, req, res, next) {
   console.log('error handler ran');
-  res.send('There was a  problem: ' + err);
+  res.send(404,'There was a problem: \n ' + err);
   console.error(err);
+
 });
 
 app.listen(config.PORT, () => {
