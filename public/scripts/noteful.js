@@ -20,6 +20,7 @@ const noteful = (function () {
     const listItems = list.map(item => `
     <li data-id="${item.id}" class="js-note-element ${currentNote.id === item.id ? 'active' : ''}">
       <a href="#" class="name js-note-show-link">${item.title}</a>
+      <button class="removeBtn js-note-delete-button">X</button>
     </li>`);
     return listItems.join('');
   }
@@ -63,9 +64,68 @@ const noteful = (function () {
     });
   }
 
+  const handleNoteFormSubmit = () => {
+    $('.js-note-edit-form').on('submit',(event) => {
+      console.log('submitted');
+      event.preventDefault();
+      const editForm = $(event.currentTarget);
+
+      const noteObj = {
+        title: editForm.find('.js-note-title-entry').val(),
+        content: editForm.find('.js-note-content-entry').val()
+      };
+
+      noteObj.id = store.currentNote.id;
+
+      if (store.currentNote.id) {
+        api.update(noteObj.id,noteObj,updateResponse => {
+          store.currentNote = updateResponse;
+          render();
+        });
+      } else {
+
+        api.create(noteObj,updateResponse => {
+          store.currentNote = updateResponse;
+
+          api.search(store.currentSearchTerm,updateResponse => {
+            store.notes = updateResponse;
+            render();
+          });
+        });      
+      }
+    });
+  };
+
+
+  function handleNoteStartNewSubmit() {
+    $('.js-start-new-note-form').on('submit', event => {
+      event.preventDefault();
+      store.currentNote = false;
+      render();
+    });
+  }
+
+
+  function handleNoteDelete () {
+    $('.js-notes-list').on('click','.js-note-delete-button', (event) => {
+      let currentNoteId = $(event.target).closest('li').attr('data-id');
+      // console.log(currentNoteId);
+      api.delete(currentNoteId, () => {
+        console.log('Note deleted');
+        api.search(store.currentSearchTerm,updateResponse => {
+          store.notes = updateResponse;
+          render();
+        });
+      });
+    });
+  }
+
   function bindEventListeners() {
     handleNoteItemClick();
     handleNoteSearchSubmit();
+    handleNoteFormSubmit();
+    handleNoteStartNewSubmit();
+    handleNoteDelete();
   }
 
   // This object contains the only exposed methods from this module:
