@@ -81,9 +81,9 @@ const noteful = (function () {
 
       if (store.currentNote.id) {
         api.update(noteObj.id,noteObj)
-        .then((updateResponse) => {
-          store.currentNote = updateResponse;
-          render();
+          .then((updateResponse) => {
+            store.currentNote = updateResponse;
+            render();
         });
       } else {
 
@@ -114,15 +114,17 @@ const noteful = (function () {
     $('.js-notes-list').on('click','.js-note-delete-button', (event) => {
       let currentNoteId = $(event.target).closest('li').attr('data-id');
       // console.log(currentNoteId);
-      api.delete(currentNoteId, () => {
-        console.log('Note deleted');
-        api.search(store.currentSearchTerm,updateResponse => {
+      api.delete(currentNoteId)
+        .then(() => {
+          console.log('Note deleted');
+          return api.search(store.currentSearchTerm)
+      })
+        .then((updateResponse) => {
           store.notes = updateResponse;
           render();
         });
       });
-    });
-  }
+    };
 
   function bindEventListeners() {
     handleNoteItemClick();
