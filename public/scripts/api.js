@@ -2,53 +2,45 @@
 'use strict';
 
 const api = {
-  
-  search: function (query, callback) {
-    $.ajax({
+  search: function (query) {
+    return $.ajax({
       type: 'GET',
       url: '/v1/notes/',
       dataType: 'json',
       data: query,
-      success: callback
     });
   },
-  
-  details: function (id, callback) {
-    $.ajax({
+  details: function (id) {
+    return $.ajax({
       type: 'GET',
       dataType: 'json',
       url: `/v1/notes/${id}`,
-      success: callback
     });
   },
-
-  update: function (id,obj,callback) {
-    $.ajax({
-      type:'PUT',
-      url:`/v1/notes/${id}`,
-      contentType:'application/json',
-      data:JSON.stringify(obj),
-      success: callback
-    });
-  },
-  
-  create: function (obj,callback) {
-    $.ajax({
-      type:'POST',
-      url:'/v1/notes',
-      dataType:'json',
-      data:JSON.stringify(obj),
-      contentType:'application/json',
-      success:callback
-    });
-  },
-
-  delete: function (id,callback) {
-    $.ajax({
-      method:'DELETE',
-      url:`/v1/notes/${id}`,
+  update: function (id, obj) {
+  return $.ajax({
+      type: 'PUT',
+      url: `/v1/notes/${id}`,
       contentType: 'application/json',
-      success:callback
+      dataType: 'json',
+      data: JSON.stringify(obj),
+    });
+  },
+  create: function (obj) {
+    return $.ajax({
+      type: 'POST',
+      url: '/v1/notes',
+      contentType: 'application/json',
+      dataType: 'json',
+      processData: false,
+      data: JSON.stringify(obj),
+    });
+  },
+  remove: function (id) {
+    return $.ajax({
+      type: 'DELETE',
+      url: `/v1/notes/${id}`,
+      dataType: 'json',
     });
   }
 }; 
