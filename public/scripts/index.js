@@ -4,10 +4,11 @@
 $(document).ready(function () {
   noteful.bindEventListeners();
 
-  api.search({}, response => {
+  api.search({})
+  .then((response) => {
     store.notes = response;
     noteful.render();
-  });
+  })
 
 });
 

@@ -42,7 +42,8 @@ const noteful = (function () {
 
       const noteId = getNoteIdFromElement(event.currentTarget);
 
-      api.details(noteId, response => {
+      api.details(noteId)
+      .then((response) => {
         store.currentNote = response;
         render();
       });
@@ -57,7 +58,8 @@ const noteful = (function () {
       const searchTerm = $('.js-note-search-entry').val();
       store.currentSearchTerm =  searchTerm ? { searchTerm } : {};
       
-      api.search(store.currentSearchTerm, response => {
+      api.search(store.currentSearchTerm)
+      .then((response => {
         store.notes = response;
         render();
       });
@@ -78,23 +80,25 @@ const noteful = (function () {
       noteObj.id = store.currentNote.id;
 
       if (store.currentNote.id) {
-        api.update(noteObj.id,noteObj,updateResponse => {
+        api.update(noteObj.id,noteObj)
+        .then((updateResponse) => {
           store.currentNote = updateResponse;
           render();
         });
       } else {
 
-        api.create(noteObj,updateResponse => {
-          store.currentNote = updateResponse;
-
-          api.search(store.currentSearchTerm,updateResponse => {
+        api.create(noteObj)
+          .then((updateResponse) => {
+            store.currentNote = updateResponse;
+            return api.search(store.currentSearchTerm);
+          })
+          .then((updateResponse) => {
             store.notes = updateResponse;
             render();
-          });
-        });      
-      }
-    });
-  };
+         })
+       }   
+      })
+    };
 
 
   function handleNoteStartNewSubmit() {

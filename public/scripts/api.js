@@ -27,7 +27,7 @@ const api = {
     });
   },
   create: function (obj) {
-    return $.ajax({
+   return $.ajax({
       type: 'POST',
       url: '/v1/notes',
       contentType: 'application/json',
