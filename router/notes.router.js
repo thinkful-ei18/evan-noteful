@@ -14,7 +14,7 @@ const notes = simDB.initialize(data);
 router.get('/',(req,res,next) => {
   const {searchTerm} = req.query;
   notes.filter(searchTerm)
-  .then((err,list) => {
+  .then((list) => {
     res.json(list);
   })
   .catch((err) => {
@@ -23,12 +23,17 @@ router.get('/',(req,res,next) => {
   })
 });
 
+
 router.get('/:id', (req,res) => {
   const { id } = req.params;
   let parsedId = parseInt(id); 
-  notes.find(parsedId,(err,results) => {
+  notes.find(parsedId)
+  .then((results) => {
     res.json(results);
-  });
+  })
+  .catch((err) => {
+    console.log(err);
+  })
 });
 
 
@@ -46,16 +51,17 @@ router.put('/:id', (req,res,next) => {
   });
 
 
-  notes.update(id,updateObj, (err,item) => {
-    if (err) {
-      return next(err);
-    }
+  notes.update(id,updateObj)
+  .then((item) => {
     if (item) {
       res.json(item);
     } else {
       next();
     }
-  });
+  })
+  .catch((err) => {
+    next(err);
+  })
 });
 
 
@@ -75,16 +81,17 @@ router.post('/', (req,res,next) => {
   }
 
 
-  notes.create(newItem, (err,item) => {
-    if (err) {
-      return next(err);
-    }
+  notes.create(newItem)
+  .then((item) => {
     if (item) {
       res.location(`http://${req.headers.host}/notes/${item.id}`).status(201).json(item);
     } else {
       next();
     }
-  });
+  })
+  .catch((err) => {
+    next(err);
+  })
 });
 
 
@@ -92,12 +99,13 @@ router.post('/', (req,res,next) => {
 
 router.delete('/:id', (req,res,next) => {
   let {id} = req.params;
-  notes.delete(id, (err) => {
-    if (err) {
-      return next(err);
-    }
+  notes.delete(id)
+  .then(() => {
+    res.status(204).end();
+  })
+  .catch((err) => {
+    next(err);
   });
-  res.status(204).end();
 });
 
 module.exports = {
