@@ -59,7 +59,7 @@ const noteful = (function () {
       store.currentSearchTerm =  searchTerm ? { searchTerm } : {};
       
       api.search(store.currentSearchTerm)
-      .then((response => {
+      .then((response) => {
         store.notes = response;
         render();
       });
