@@ -117,7 +117,7 @@ const noteful = (function () {
       api.delete(currentNoteId)
         .then(() => {
           console.log('Note deleted');
-          return api.search(store.currentSearchTerm)
+          return api.search(store.currentSearchTerm);
       })
         .then((updateResponse) => {
           store.notes = updateResponse;
