@@ -5,19 +5,5 @@ $(document).ready(function () {
   noteful.bindEventListeners();
 
   api.search({})
-  .then((response) => {
-    store.notes = response;
-    noteful.render();
-  })
-
+  .then(noteful.setNotesandRender);
 });
-
-
-
-// const newNote = {
-//   title: 'new note',
-//   content: 'the body'
-// };
-// api.create(newNote, response => {
-//   console.log(response);
-// });
