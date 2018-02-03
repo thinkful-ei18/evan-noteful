@@ -9,6 +9,7 @@ const chaiSpies = require('chai-spies');
 
 // use 
 chai.use(chaiHttp);
+chai.use(chaiSpies);
 
 describe('Sanity Checks', function () {
   it('2+2 should return 4', function () {
@@ -30,7 +31,7 @@ describe('Express Static', function() {
 });
 
 describe('404 handler', function () {
-  it('should response with 404 with given a bad path', function () {
+  it('should respond with 404 with given a bad path', function () {
     const spy = chai.spy();
     return chai.request(app)
       .get('/badpathmon')
