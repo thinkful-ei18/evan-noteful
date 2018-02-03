@@ -36,9 +36,13 @@ app.use(function (err, req, res, next) {
 
 
 
+if (require.main === module) {
 
-app.listen(config.PORT, () => {
-  console.log('server listening on port 8080');
-}).on('error', err => {
-  console.log(err);
-});
+  app.listen(config.PORT, () => {
+    console.log('server listening on port 8080');
+  }).on('error', err => {
+    console.log(err);
+  });
+}
+
+module.exports = app;
