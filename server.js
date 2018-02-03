@@ -36,13 +36,19 @@ app.use(function (err, req, res, next) {
 
 
 
-if (require.main === module) {
 
-  app.listen(config.PORT, () => {
-    console.log('server listening on port 8080');
-  }).on('error', err => {
-    console.log(err);
+const runServer = function () {
+  return new Promise((resolve,reject) => {
+    resolve(
+      app.listen(config.PORT, () => {
+        console.log('server listening on port 8080');
+      })
+    );
   });
+};
+
+if (require.main === module) {
+  runServer();
 }
 
 module.exports = app;

@@ -44,3 +44,14 @@ describe('404 handler', function () {
       });
   });
 });
+
+
+describe('GET /v1/notes', function () {
+  it('should return a status of 200', function () {
+    return chai.request(app)
+      .get('/v1/notes')
+      .then(function (res) {
+        expect(res).to.have.status(200);
+      });
+  });
+});
