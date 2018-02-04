@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {},
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "test": "mocha --exit"
   },
   "dependencies": {
