@@ -150,3 +150,22 @@ describe('PUT /v1/notes', function () {
   });
 });
 
+
+describe('DELETE /vi/notes/:id', function () {
+  it('should remove the correct item from the list on delete', function () {
+    return chai.request(app)
+      .delete('/v1/notes/1000')
+      .then((res) => {
+        expect(res).to.have.status(204);
+
+      });
+  });
+
+  it('should return an error when attempting to delete a non-existent ID', function () {
+    return chai.request(app)
+      .delete('/v1/notes/20002')
+      .catch((err) => {
+        expect(err.response).to.have.status(404);
+      });
+  });
+});
