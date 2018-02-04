@@ -38,7 +38,7 @@ app.use(function (err, req, res, next) {
 
 const runServer = function () {
   return new Promise((resolve,reject) => {
-    const server = app.listen(config.PORT, () => {
+    const server = app.listen(process.env.PORT || 8080, () => {
       console.log('starting server');
       console.log('server listening on port 8080');
       resolve(server);
